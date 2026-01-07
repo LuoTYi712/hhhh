@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}字帖库 - 按朝代分类{% endblock %}
+{% block content %}
+<section class="zitie-library">
+    <h2>字帖库（按朝代分类）</h2>
+    
+    <!-- 朝代筛选 -->
+    <div class="filter-form">
+        <select id="zitie-dynasty" onchange="location.href=this.value">
+            <option value="{{ url_for('zitie') }}">全部朝代</option>
+            {% for dynasty in dynasties %}
+            <option value="{{ url_for('zitie', dynasty_id=dynasty.id) }}" {% if selected_dynasty == dynasty.id|string %}selected{% endif %}>
+                {{ dynasty.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- 字帖列表 -->
+    <div class="zitie-grid">
+        {% if zitie_list %}
+            {% for zitie in zitie_list %}
+            <div class="zitie-card">
+                <div class="zitie-img">
+                    <img src="{{ zitie.img_path }}" alt="{{ zitie.title }}">
+                </div>
+                <div class="zitie-info">
+                    <h3>{{ zitie.title }}</h3>
+                    <p>作者：{{ zitie.author }}</p>
+                    <p>书体：{{ zitie.font_type }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-tip">暂无字帖数据</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

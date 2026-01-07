@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}登录{% endblock %}
+{% block content %}
+<div class="auth-container">
+    <h2>青墨书法 - 登录</h2>
+    <form method="post" class="auth-form">
+        <div class="form-item">
+            <label>用户名：</label>
+            <input type="text" name="username" required placeholder="请输入用户名">
+        </div>
+        <div class="form-item">
+            <label>密码：</label>
+            <input type="password" name="password" required placeholder="请输入密码">
+        </div>
+        <button type="submit" class="btn primary-btn">登录</button>
+        <div class="auth-link">
+            <a href="{{ url_for('register') }}">注册账号</a>
+            <a href="{{ url_for('forget_pwd') }}">忘记密码？</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

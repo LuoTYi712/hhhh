@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}首页 - 每日推荐{% endblock %}
+{% block content %}
+<!-- 每日书法推荐 -->
+<section class="daily-recommend">
+    <h2>每日书法推荐</h2>
+    {% if daily_recommend %}
+    <div class="recommend-card">
+        <div class="recommend-img">
+            <img src="{{ daily_recommend.img_path }}" alt="{{ daily_recommend.title }}">
+        </div>
+        <div class="recommend-info">
+            <h3>{{ daily_recommend.title }}</h3>
+            <p class="author">作者：{{ daily_recommend.author }}（{{ daily_recommend.font_type }}·{{ daily_recommend.dynasty_id|string }}）</p>
+            <div class="content">
+                <h4>临摹文字：</h4>
+                <p>{{ daily_recommend.content }}</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p class="empty-tip">暂无推荐字帖，请联系管理员添加</p>
+    {% endif %}
+</section>
+
+<!-- 朝代时间轴 -->
+<section class="dynasty-timeline">
+    <h2>书法朝代时间轴</h2>
+    <div class="timeline-container">
+        {% for dynasty in dynasties %}
+        <a href="{{ url_for('dynasty', id=dynasty.id) }}" class="timeline-item">
+            <div class="dynasty-name">{{ dynasty.name }}</div>
+            <div class="dynasty-year">{{ dynasty.start_year }} - {{ dynasty.end_year }}</div>
+            <div class="dynasty-feature">{{ dynasty.feature }}</div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

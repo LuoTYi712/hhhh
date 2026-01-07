@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</{% extends 'base.html' %}
+{% block title %}书法字典 - 多方式查询{% endblock %}
+{% block content %}
+<section class="dictionary">
+    <h2>书法字典</h2>
+
+    <!-- 搜索表单 -->
+    <div class="search-form">
+        <form method="get" action="{{ url_for('dictionary') }}">
+            <select name="type">
+                <option value="title" {% if search_type == 'title' %}selected{% endif %}>按字帖名称</option>
+                <option value="author" {% if search_type == 'author' %}selected{% endif %}>按作者</option>
+                <option value="character" {% if search_type == 'character' %}selected{% endif %}>按单字</option>
+            </select>
+            <input type="text" name="keyword" placeholder="请输入搜索关键词" value="{{ keyword }}">
+            <button type="submit" class="btn primary-btn">搜索</button>
+        </form>
+    </div>
+
+    <!-- 字典结果 -->
+    <div class="dictionary-result">
+        {% if dictionary_list %}
+            {% for item in dictionary_list %}
+            <div class="dictionary-card">
+                <h3>{{ item.title }}</h3>
+                <p>作者：{{ item.author }} | 书体：{{ item.font_type }}</p>
+                <div class="content-preview">{{ item.content[:200] }}...</div>
+                <a href="javascript:viewDetail('{{ item.id }}')" class="btn secondary-btn">查看详情</a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-tip">未找到相关字帖，请更换关键词</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}tml>

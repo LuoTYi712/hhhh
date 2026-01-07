@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}AI创作{% endblock %}
+{% block content %}
+<h1>上传图片 · AI生成应景古诗</h1>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="img" accept="image/*" required>
+    <br><br>
+    <input type="text" name="keyword" placeholder="输入关键词（如：山水、明月、书法）" value="书法">
+    <br><br>
+    <button type="submit">生成古诗</button>
+</form>
+
+{% if ai_poetry %}
+<div class="upload-result">
+    <img src="{{ img_path }}" alt="上传的图片">
+    <h3 style="color: #8b4513;">AI生成古诗</h3>
+    <p>{{ ai_poetry }}</p>
+</div>
+{% endif %}
+{% endblock %}

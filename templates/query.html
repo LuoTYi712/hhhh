@@ -1,0 +1,13 @@
+<div class="result">
+    {% if poems %}
+        {% for p in poems %}
+        <div style="margin: 20px 0; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+            <h3>{{ p.title }}（{{ p.dynasty_name }}·{{ p.author }}）</h3>
+            <p style="font-size: 16px; line-height: 2;">{{ p.content }}</p>
+            <span style="color: #999;">类型：{{ '古诗' if p.type == 'poem' else '名言' }}</span>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center; color: #999; font-size: 18px;">暂无数据，请选择朝代查询</p>
+    {% endif %}
+</div>

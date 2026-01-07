@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}朝代查询 - 古诗名言{% endblock %}
+{% block content %}
+<section class="dynasty-query">
+    <h2>朝代古诗/名言查询</h2>
+    
+    <!-- 朝代选择 -->
+    <div class="query-form">
+        <select id="dynasty-select" onchange="location.href=this.value">
+            <option value="{{ url_for('dynasty') }}">请选择朝代</option>
+            {% for dynasty in dynasties %}
+            <option value="{{ url_for('dynasty', id=dynasty.id) }}" {% if selected_id == dynasty.id|string %}selected{% endif %}>
+                {{ dynasty.name }}（{{ dynasty.start_year }}-{{ dynasty.end_year }}）
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- 古诗/名言列表 -->
+    <div class="poetry-list">
+        {% if poetry_list %}
+            {% for poetry in poetry_list %}
+            <div class="poetry-card">
+                <h3>{{ poetry.title }}</h3>
+                <p class="author">作者：{{ poetry.author }}（{{ poetry.dynasty_name }}）</p>
+                <p class="type">类型：{% if poetry.type == 'poem' %}古诗{% else %}名言{% endif %}</p>
+                <div class="content">{{ poetry.content }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-tip">暂无该朝代的古诗/名言数据</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

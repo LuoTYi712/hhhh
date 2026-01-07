@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}AI功能 - 书法打分+古诗生成{% endblock %}
+{% block content %}
+<section class="ai-function">
+    <div class="ai-tabs">
+        <button class="tab-btn active" data-tab="score">AI书法打分</button>
+        <button class="tab-btn" data-tab="poetry">AI生成古诗</button>
+    </div>
+
+    <!-- AI书法打分 -->
+    <div class="ai-tab-content active" id="score-tab">
+        <h2>AI书法作品打分 & 字体识别</h2>
+        <form method="post" enctype="multipart/form-data" class="ai-form" action="{{ url_for('ai', tab='score') }}">
+            <div class="form-item">
+                <label>上传书法作品：</label>
+                <input type="file" name="score_img" accept="image/*" required>
+                {% if score_img_path %}
+                <div class="preview-img" style="margin-top:10px;">
+                    <img src="{{ score_img_path }}" alt="书法作品" style="max-width:300px;border:1px solid #eee;">
+                </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn primary-btn">识别字体+生成评分</button>
+        </form>
+
+        {% if score_result %}
+        <div class="ai-result" style="margin-top:20px;">
+            <div class="result-text">
+                <h3>字体识别结果：</h3>
+                <p style="font-size:18px;">{{ font_type }}</p>
+
+                <h3>AI评分结果：</h3>
+                <pre style="font-size:16px;line-height:2;">{{ score_result }}</pre>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- AI生成古诗（展示AI生成的书法图片） -->
+    <div class="ai-tab-content" id="poetry-tab">
+        <h2>AI生成应景古诗（含AI书法图片）</h2>
+        <form method="post" enctype="multipart/form-data" class="ai-form" action="{{ url_for('ai', tab='poetry') }}">
+            <div class="form-item">
+                <label>上传参考图片：</label>
+                <input type="file" name="poetry_img" accept="image/*" required>
+                {% if poetry_img_path %}
+                <div class="preview-img" style="margin-top:10px;">
+                    <img src="{{ poetry_img_path }}" alt="参考图片" style="max-width:300px;border:1px solid #eee;">
+                </div>
+                {% endif %}
+            </div>
+            <div class="form-item">
+                <label>书法字体选择（AI生成）：</label>
+                <select name="font_type" required style="padding:8px; font-size:16px;">
+                    <option value="楷书">楷书</option>
+                    <option value="行书">行书</option>
+                    <option value="草书">草书</option>
+                    <option value="隶书">隶书</option>
+                    <option value="瘦金体">瘦金体</option>
+                </select>
+            </div>
+            <button type="submit" class="btn primary-btn">生成古诗+AI书法图片</button>
+        </form>
+
+        {% if poetry_result %}
+        <div class="ai-result" style="margin-top:20px;display:flex;flex-direction:column;gap:20px;">
+            <!-- 图片主题解读 -->
+            <div class="img-interpretation" style="padding:15px;border:1px solid #eee;border-radius:8px;">
+                <h3 style="margin-top:0;">图片主题解读：</h3>
+                <p style="font-size:16px;">{{ img_interpretation }}</p>
+            </div>
+
+            <!-- 生成古诗（字体放大） -->
+            <div class="poetry-content" style="padding:15px;border:1px solid #eee;border-radius:8px;">
+                <h3 style="margin-top:0;">AI生成古诗：</h3>
+                <pre style="font-size:20px;line-height:2.5;white-space:pre-wrap;">{{ poetry_result }}</pre>
+            </div>
+
+            <!-- AI生成的书法图片 -->
+            {% if font_image_url %}
+            <div class="copybook-section" style="padding:15px;border:1px solid #eee;border-radius:8px;">
+                <h3 style="margin-top:0;">{{ selected_font }}书法临摹图片（AI生成）：</h3>
+                <img src="{{ font_image_url }}" alt="AI生成书法图片" style="max-width:800px;border:1px solid #eee;">
+            </div>
+            {% else %}
+            <div class="copybook-section" style="padding:15px;border:1px solid #eee;border-radius:8px;">
+                <h3 style="margin-top:0;">{{ selected_font }}书法临摹图片：</h3>
+                <p>图片生成失败，请重试</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('tab') || 'score';
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === activeTab);
+    });
+    document.querySelectorAll('.ai-tab-content').forEach(content => {
+        content.classList.toggle('active', content.id === `${activeTab}-tab`);
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tab = this.getAttribute('data-tab');
+            window.location.href = "{{ url_for('ai') }}?tab=" + tab;
+        });
+    });
+});
+</script>
+{% endblock %}

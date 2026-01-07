@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}忘记密码{% endblock %}
+{% block content %}
+<div class="auth-container">
+    <h2>青墨书法 - 找回密码</h2>
+    <form method="post" class="auth-form">
+        <div class="form-item">
+            <label>用户名：</label>
+            <input type="text" name="username" required placeholder="请输入注册的用户名">
+        </div>
+        <div class="form-item">
+            <label>新密码：</label>
+            <input type="password" name="new_pwd" required placeholder="请输入新密码">
+        </div>
+        <button type="submit" class="btn primary-btn">修改密码</button>
+        <div class="auth-link">
+            <a href="{{ url_for('login') }}">返回登录</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
